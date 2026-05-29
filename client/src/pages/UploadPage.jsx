@@ -153,67 +153,75 @@ const UploadPage = () => {
       {/* File List */}
       {files.length > 0 && (
         <div className="card overflow-hidden">
-          <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-              Selected Files <span className="badge bg-blue-100 text-blue-700">{files.length}</span>
-            </h3>
+          <details className="group" open>
+            <summary className="p-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center cursor-pointer select-none">
+              <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                Selected Files <span className="badge bg-blue-100 text-blue-700">{files.length}</span>
+              </h3>
+              
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent details toggle when clicking button
+                    handleUpload();
+                  }}
+                  disabled={isUploading || !files.some(f => f.status === 'pending' || f.status === 'failed')}
+                  className="btn-primary py-1.5 px-4 text-sm"
+                >
+                  {isUploading ? (
+                    <><Loader2 size={16} className="animate-spin" /> Uploading...</>
+                  ) : (
+                    <><Upload size={16} /> Start Upload</>
+                  )}
+                </button>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </div>
+            </summary>
             
-            <button 
-              onClick={handleUpload}
-              disabled={isUploading || !files.some(f => f.status === 'pending' || f.status === 'failed')}
-              className="btn-primary py-1.5 px-4 text-sm"
-            >
-              {isUploading ? (
-                <><Loader2 size={16} className="animate-spin" /> Uploading...</>
-              ) : (
-                <><Upload size={16} /> Start Upload</>
-              )}
-            </button>
-          </div>
-          
-          <ul className="divide-y divide-gray-50 max-h-[400px] overflow-y-auto">
-            {files.map(item => (
-              <li key={item.id} className="p-4 hover:bg-gray-50/50 transition-colors">
-                <div className="flex items-start gap-4">
-                  <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-lg">
-                    <File size={20} />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <p className="text-sm font-medium text-gray-900 truncate pr-4">{item.name}</p>
-                      <button 
-                        onClick={() => removeFile(item.id)}
-                        disabled={isUploading && item.status === 'uploading'}
-                        className="text-gray-400 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors disabled:opacity-30"
-                      >
-                        <X size={16} />
-                      </button>
+            <ul className="divide-y divide-gray-50 max-h-[400px] overflow-y-auto">
+              {files.map(item => (
+                <li key={item.id} className="p-4 hover:bg-gray-50/50 transition-colors">
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 p-2 bg-blue-50 text-blue-600 rounded-lg">
+                      <File size={20} />
                     </div>
                     
-                    <div className="flex items-center gap-3 text-xs text-gray-500 mb-2">
-                      <span>{formatSize(item.size)}</span>
-                      <span>•</span>
-                      <span className={`badge badge-${item.status}`}>{item.status}</span>
-                      
-                      {item.status === 'complete' && <CheckCircle2 size={14} className="text-green-500 ml-auto" />}
-                      {item.status === 'failed' && <AlertCircle size={14} className="text-red-500 ml-auto" />}
-                    </div>
-
-                    {/* Progress Bar */}
-                    {(item.status === 'uploading' || item.progress > 0) && (
-                      <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                        <div 
-                          className={`h-full progress-bar rounded-full ${item.status === 'failed' ? 'bg-red-500' : item.status === 'complete' ? 'bg-green-500' : 'bg-blue-600'}`}
-                          style={{ width: `${item.progress}%` }}
-                        ></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <p className="text-sm font-medium text-gray-900 truncate pr-4">{item.name}</p>
+                        <button 
+                          onClick={() => removeFile(item.id)}
+                          disabled={isUploading && item.status === 'uploading'}
+                          className="text-gray-400 hover:text-red-500 p-1 rounded-md hover:bg-red-50 transition-colors disabled:opacity-30"
+                        >
+                          <X size={16} />
+                        </button>
                       </div>
-                    )}
+                      
+                      <div className="flex items-center gap-3 text-xs text-gray-500 mb-2">
+                        <span>{formatSize(item.size)}</span>
+                        <span>•</span>
+                        <span className={`badge badge-${item.status}`}>{item.status}</span>
+                        
+                        {item.status === 'complete' && <CheckCircle2 size={14} className="text-green-500 ml-auto" />}
+                        {item.status === 'failed' && <AlertCircle size={14} className="text-red-500 ml-auto" />}
+                      </div>
+
+                      {/* Progress Bar */}
+                      {(item.status === 'uploading' || item.progress > 0) && (
+                        <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className={`h-full progress-bar rounded-full ${item.status === 'failed' ? 'bg-red-500' : item.status === 'complete' ? 'bg-green-500' : 'bg-blue-600'}`}
+                            style={{ width: `${item.progress}%` }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </details>
         </div>
       )}
 
