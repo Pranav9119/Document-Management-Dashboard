@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-family: 'Livvic', sans-serif;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-blue-50 via-white to-slate-50 min-h-screen;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-blue-100 shadow-sm;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold
+           py-2.5 px-5 rounded-xl transition-all duration-150 flex items-center
+           justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl px-3 py-2
+           transition-all duration-150 flex items-center gap-1.5 text-sm font-medium;
+  }
+
+  .badge {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full capitalize;
+  }
+
+  .badge-success { @apply bg-green-100 text-green-700; }
+  .badge-pending { @apply bg-gray-100  text-gray-500;  }
+  .badge-uploading { @apply bg-blue-100 text-blue-700; }
+  .badge-failed   { @apply bg-red-100  text-red-700;  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #bfdbfe; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #93c5fd; }
+
+/* ─── Progress bar ───────────────────────────────────────── */
+.progress-bar { transition: width 0.25s ease; }
