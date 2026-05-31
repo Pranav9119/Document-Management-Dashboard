@@ -1,7 +1,10 @@
 const path = require('path');
 const Document = require('../models/Document');
 
-// GET /api/documents — fetch all documents, sorted newest first
+/**
+ * GET /api/documents
+ * Returns all documents sorted by newest first.
+ */
 const getDocuments = async (req, res) => {
   try {
     const docs = await Document.find().sort({ uploadedAt: -1 });
@@ -12,21 +15,21 @@ const getDocuments = async (req, res) => {
   }
 };
 
-// GET /api/documents/:id/download — stream file to client as download
+/**
+ * GET /api/documents/:id/download
+ * Streams the requested file to the client.
+ */
 const downloadDocument = async (req, res) => {
   try {
     const doc = await Document.findById(req.params.id);
-
     if (!doc) {
       return res.status(404).json({ error: 'Document not found.' });
     }
 
     return res.download(doc.path, doc.originalName, (err) => {
-      if (err) {
+      if (err && !res.headersSent) {
         console.error('Download error:', err);
-        if (!res.headersSent) {
-          return res.status(500).json({ error: 'File download failed.' });
-        }
+        return res.status(500).json({ error: 'File download failed.' });
       }
     });
   } catch (err) {

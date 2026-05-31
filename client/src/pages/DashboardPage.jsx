@@ -14,15 +14,20 @@ const DashboardPage = () => {
   const { notifications } = useNotifications();
 
   const fetchDocs = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const { data } = await getDocuments();
-      setDocuments(data);
-    } catch (err) {
-      console.error('Failed to fetch documents:', err);
-      setError('Could not load documents. Please try again.');
-    } finally {
+  try {
+    console.log('Fetching documents...');
+    setIsLoading(true);
+    setError(null);
+    const { data } = await getDocuments();
+    console.log('Fetched documents response:', data);
+    setDocuments(data);
+  } catch (err) {
+    console.error('Failed to fetch documents:', err);
+    setError('Could not load documents. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
       setIsLoading(false);
     }
   }, []);

@@ -1,6 +1,6 @@
 import { useNotifications } from '../context/NotificationContext';
 import { formatDistanceToNow } from 'date-fns';
-import { Check, Info, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Bell, Check, Info, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const NotificationDropdown = ({ onClose }) => {
   const { notifications, markRead } = useNotifications();
